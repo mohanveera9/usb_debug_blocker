@@ -1,21 +1,45 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:usb_debug_blocker/usb_debug_blocker.dart';
+import 'package:usb_debug_blocker/usb_debug_blocker_method_channel.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('isDeveloperOptionsEnabled returns a bool', () async {
-    final isDevEnabled = await UsbDebugBlocker.isDeveloperOptionsEnabled();
-    expect(isDevEnabled, isA<bool>());
+  final MethodChannelUsbDebugBlocker platform = MethodChannelUsbDebugBlocker();
+  const MethodChannel channel = MethodChannel('usb_debug_blocker');
+
+  setUp(() {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+      channel,
+      (MethodCall methodCall) async {
+        switch (methodCall.method) {
+          case 'isDeveloperOptionsEnabled':
+            return true;
+          case 'isUsbConnected':
+            return false;
+          case 'isMtpModeEnabled':
+            return true;
+          default:
+            return null;
+        }
+      },
+    );
   });
 
-  test('isUsbConnected returns a bool', () async {
-    final isUsbConnected = await UsbDebugBlocker.isUsbConnected();
-    expect(isUsbConnected, isA<bool>());
+  tearDown(() {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, null);
   });
 
-  test('isMtpModeEnabled returns a bool', () async {
-    final isMtpEnabled = await UsbDebugBlocker.isMtpModeEnabled();
-    expect(isMtpEnabled, isA<bool>());
+  test('isDeveloperOptionsEnabled returns true', () async {
+    expect(await platform.isDeveloperOptionsEnabled(), true);
+  });
+
+  test('isUsbConnected returns false', () async {
+    expect(await platform.isUsbConnected(), false);
+  });
+
+  test('isMtpModeEnabled returns true', () async {
+    expect(await platform.isMtpModeEnabled(), true);
   });
 }

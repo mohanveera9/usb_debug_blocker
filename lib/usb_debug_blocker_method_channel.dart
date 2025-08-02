@@ -3,9 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'usb_debug_blocker_platform_interface.dart';
 
-/// An implementation of [UsbDebugBlockerPlatform] that uses method channels.
 class MethodChannelUsbDebugBlocker extends UsbDebugBlockerPlatform {
-  /// The method channel used to interact with the native platform.
   @visibleForTesting
   final methodChannel = const MethodChannel('usb_debug_blocker');
 
@@ -13,5 +11,24 @@ class MethodChannelUsbDebugBlocker extends UsbDebugBlockerPlatform {
   Future<String?> getPlatformVersion() async {
     final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
     return version;
+  }
+
+  @override
+  Future<bool> isDeveloperOptionsEnabled() async {
+    final result = await methodChannel.invokeMethod<bool>('isDeveloperOptionsEnabled');
+    return result ?? false;
+  }
+
+  @override
+  Future<bool> isUsbConnected() async {
+    final result = await methodChannel.invokeMethod<bool>('isUsbConnected');
+    return result ?? false;
+  }
+
+  @override
+  Future<bool> isMtpModeEnabled() async {
+    // Make sure this matches your Android implementation exactly
+    final result = await methodChannel.invokeMethod<bool>('isMtpModeEnabled');
+    return result ?? false;
   }
 }

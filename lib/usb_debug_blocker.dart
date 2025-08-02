@@ -1,17 +1,19 @@
-import 'package:flutter/services.dart';
+import 'usb_debug_blocker_platform_interface.dart';
 
 class UsbDebugBlocker {
- static const MethodChannel _channel = MethodChannel('usb_debug_blocker');
+  static Future<String?> getPlatformVersion() {
+    return UsbDebugBlockerPlatform.instance.getPlatformVersion();
+  }
 
- static Future<bool> isDeveloperOptionsEnabled() async {
-  return await _channel.invokeMethod('isDeveloperOptionsEnabled');
- }
+  static Future<bool> isDeveloperOptionsEnabled() {
+    return UsbDebugBlockerPlatform.instance.isDeveloperOptionsEnabled();
+  }
 
- static Future<bool> isUsbConnected() async {
-  return await _channel.invokeMethod('isUsbConnected');
- }
+  static Future<bool> isUsbConnected() {
+    return UsbDebugBlockerPlatform.instance.isUsbConnected();
+  }
 
- static Future<bool> isMtpModeEnabled() async {
-  return await _channel.invokeMethod('isMtpMethodEnabled');
- }
+  static Future<bool> isMtpModeEnabled() {
+    return UsbDebugBlockerPlatform.instance.isMtpModeEnabled();
+  }
 }

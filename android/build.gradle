@@ -1,4 +1,4 @@
-group = "com.example.usb_debug_blocker"
+group = "com.mohanveera.usb_debug_blocker"
 version = "1.0-SNAPSHOT"
 
 buildscript {
