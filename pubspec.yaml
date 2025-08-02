@@ -1,6 +1,6 @@
 name: usb_debug_blocker
 description: A Flutter plugin to detect Developer Options, USB connection, and MTP mode on Android devices.
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/mohanveera9/usb_debug_blocker.git
 
 environment:
